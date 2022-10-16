@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xml:base="https://blog.avuln.com"  xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
+ <title>AVULN Blog - refresh_token</title>
+ <link>https://blog.avuln.com/tags/refreshtoken</link>
+ <description></description>
+ <language>en</language>
+<item>
+ <title>A couple more common OAuth 2.0 vulnerabilities </title>
+ <link>https://blog.avuln.com/article/4</link>
+ <description>&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot; property=&quot;content:encoded&quot;&gt;&lt;p&gt;&lt;strong&gt;TL;DR&lt;/strong&gt; The couple of bugs described below are common across different OAuth 2.0 implementations. The bugs may allow a malicious application to maintain an access to victim&#039;s account even after access revocation performed by the victim. &lt;/p&gt;
+&lt;p&gt;&lt;!--break--&gt;&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-size: large;&quot;&gt;&lt;strong&gt;1. Race Condition for &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; / &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;refresh_token&lt;/span&gt; generation&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;According to any OAuth 2.0 API documentation and to &lt;a href=&quot;https://tools.ietf.org/html/rfc6749&quot;&gt;OAuth 2.0 RFC&lt;/a&gt;, when an application (&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;client&lt;/span&gt; in terms of OAuth) obtains &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;code&lt;/span&gt; value from OAuth 2.0 Provider (i.e. the moment when user authorizes an application), this value should be exchanged for &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt;. It seems to be obvious that &lt;strong&gt;one&lt;/strong&gt; &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;code&lt;/span&gt; &lt;strong&gt;value should be exchanged for one&lt;/strong&gt; &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; (or for a single pair of &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; and &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;refresh_token&lt;/span&gt;, if resresh tokens are supported). Also RFC contains quite explicit requirements about that:&lt;/p&gt;
+&lt;p&gt;1) &lt;a href=&quot;https://tools.ietf.org/html/rfc6749#section-4.1.2&quot;&gt;https://tools.ietf.org/html/rfc6749#section-4.1.2&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;&lt;em&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;                        If an authorization code is used more than&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;   once, the authorization server MUST deny the request and SHOULD&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;   revoke (when possible) all tokens previously issued based on&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;   that authorization code.  The authorization code is bound to&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;   the client identifier and redirection URI.&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;2) &lt;a href=&quot;https://tools.ietf.org/html/rfc6749#section-10.5&quot;&gt;https://tools.ietf.org/html/rfc6749#section-10.5&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;&lt;em&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;   Authorization codes MUST be short lived and single-use.  If the&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;   authorization server observes multiple attempts to exchange an&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;   authorization code for an access token, the authorization server&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;   SHOULD attempt to revoke all access tokens already granted based on&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;   the compromised authorization code.&lt;/span&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;However, most of OAuth 2.0 providers we&#039;ve tested either didn&#039;t have that mechanism or had a race condition bug in it. Due to that, many of the provides had authorization issues.&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Proof Of Concept&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;0) register an application with OAuth 2.0 provider you&#039;re going to test&lt;/p&gt;
+&lt;p&gt;1) open link to authorize the application&lt;/p&gt;
+&lt;p&gt;2) log into user (i.e. victim) account and Authorize the application&lt;/p&gt;
+&lt;p&gt;3) obtain &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;code&lt;/span&gt; value from callback URL&lt;/p&gt;
+&lt;p&gt;4) try to exploit Race Condition for obtaining &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&quot;brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag&quot;&gt;#!/bin/bash
+for i in {0..20}
+do
+ curl --data &quot;code=$1&amp;amp;client_id=CLIENT_ID&amp;amp;client_secret=CLIENT_SECRET&amp;amp;redirect_uri=CALLBACK_URL&amp;amp;grant_type=authorization_code&quot; &quot;https://OAUTH_PROVIDER/oauth/token&quot; &amp;amp;
+done
+# where $1 is code value (first parameter passed to the script)&lt;/pre&gt;&lt;p&gt;5) please note that you may have to do several attempts to explot the race condition &lt;/p&gt;
+&lt;p&gt;6) if several &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; values obtained, check whether each of them is valid&lt;/p&gt;
+&lt;p&gt;7) go to application settings for victim&#039;s account and revoke access for the application&lt;/p&gt;
+&lt;p&gt;8) check whether all &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; values became invalid; if only one &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; has been revoked and all the rest stay active -- this is the worst case&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;PoC for &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;refresh_token&lt;/span&gt; is similar to the one just described, but on step 4 you may legally obtain &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; and &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;refresh_token&lt;/span&gt; pair. Then you need to exploit Race Condition for&lt;span style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; line-height: 1.625;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;font-size: 15px; line-height: 1.625; font-family: &#039;courier new&#039;, courier;&quot;&gt;reshresh_token&lt;/span&gt;&lt;span style=&quot;font-size: 15px; line-height: 1.625;&quot;&gt; request the same way:&lt;/span&gt;&lt;/p&gt;
+&lt;pre class=&quot;brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag&quot;&gt;#!/bin/bash
+for i in {0..20}
+do
+ curl --data &quot;refhresh_token=$1&amp;amp;client_id=CLIENT_ID&amp;amp;client_secret=CLIENT_SECRET&amp;amp;redirect_uri=CALLBACK_URL&amp;amp;grant_type=refresh_token&quot; &quot;https://OAUTH_PROVIDER/oauth/token&quot; &amp;amp;
+done
+# where $1 is refresh_token value (first parameter passed to the script)&lt;/pre&gt;&lt;p&gt;Explotation of Race Condition for &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;refresh_token&lt;/span&gt; is more dangerous than for &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt;, as usually there is no way for an attacker to fail. Each exploitation gives at least one new &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;refresh_token&lt;/span&gt; value that may be used later. So, number of token pairs grows exponentially, if provider is vulnerable.&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Statistics&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;32&lt;/strong&gt; OAuth 2.0 providers tested&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;26&lt;/strong&gt; out of 32 had race condition bug:&lt;/li&gt;
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;5&lt;/strong&gt; providers returned the same &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; value for successful competing requests -&amp;gt; &lt;strong&gt;good behavior&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;1&lt;/strong&gt; provider generated different &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; values, but only one token is valid -&amp;gt; &lt;strong&gt;not bad behavior&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;20&lt;/strong&gt; providers generated different &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; values and all of them were valid -&amp;gt; &lt;strong&gt;bad behavior&lt;/strong&gt;, as it violates the RFC + unexpected flaws caused by multiple tokens/contexts generation are possible&lt;/li&gt;
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;10&lt;/strong&gt; out of 20 providers had issues with revocation of access (step 8 from the PoC succeeded for them) -&amp;gt; &lt;strong&gt;the worst case&lt;/strong&gt;: a victim sees that access is revoked, but malicious application still has access to victim&#039;s account&lt;/li&gt;
+&lt;/ul&gt;&lt;/ul&gt;&lt;/ul&gt;&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-size: large;&quot;&gt;&lt;strong&gt;2. Missing invalidation of authorization &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;code&lt;/span&gt; during access revocation&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Another issue which is common for multiple OAuth 2.0 implementations. It is not race condition bug. It is a logical error caused by misunderstanding of some &quot;states&quot; in OAuth 2.0 flow.&lt;/p&gt;
+&lt;p&gt;OAuth 2.0 API makes it possible for users to grant access to their accounts to some third-side applications. Of course, users are able to manage such applications&#039; access to their accounts and may deny access for any application. When user denies access for the application, all &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; values (and &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;refresh_token&lt;/span&gt; as well) are being revoked and become invalid. But not only &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token &lt;/span&gt;should be revoked, authorization &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;code&lt;/span&gt; (it is an intermediate token used in OAuth2 Authorization Flow) must be revoked as well. Sadly, most of OAuth2 API implementations do not revoke authorization &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;code&lt;/span&gt; during access revocation. It may be exploited in order to restore access to user&#039;s account by malicious application right after access revocation.&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;&lt;strong style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;Proof Of Concept&lt;/strong&gt;&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;0) register an application for OAuth 2.0 provider you&#039;re going to test&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;1) open link for authorization of the application&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;2) log into user (i.e. victim) account and Authorize the application&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;3) obtain &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;code&lt;/span&gt; value from callback URL&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;4) obtain &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt;, check its validity if you wish&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;5) open link for authorization again (i.e. repeat step 1)&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;6) most of providers support automatic redirect to callback URL on this stage (also there may be additional parameters for that in URL: like &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;force_approval&lt;/span&gt; or &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;approval_prompt&lt;/span&gt; or some checkbox in applications settings), this makes exploitation easier; otherwise, Authorize the application manually&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;7) copy &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;code&lt;/span&gt; value from callback URL and save it for furture usage&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;8) &lt;span style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; line-height: 1.625;&quot;&gt;go to application settings page for &lt;/span&gt;victim&lt;span style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; line-height: 1.625;&quot;&gt;&#039;s account and revoke access for the application&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;&lt;span style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; line-height: 1.625;&quot;&gt;9) ensure that &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; obtained on step 4 is invalidated&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;&lt;span style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; line-height: 1.625;&quot;&gt;10) exchange &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;code&lt;/span&gt; value from step 7 for new &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt;, check whether new &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt; is valid&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;&quot;&gt;&lt;strong&gt; &lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; font-weight: 300;&quot;&gt;If new &lt;/span&gt;&lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;access_token&lt;/span&gt;&lt;span style=&quot;font-family: &#039;Helvetica Neue&#039;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; font-weight: 300;&quot;&gt; is valid, that means &lt;/span&gt;malicious application still has access to user&#039;s account even after revocation of authorization by the user.&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;For real attack scenario it is important to mention the following:&lt;/p&gt;
+&lt;p&gt;a) it seems that step 5 requires interaction from user, actually it is not necessary&lt;/p&gt;
+&lt;p&gt;b) authorization code obtained via callback has certain lifetime, but it is not an issue as well&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;Malicious application that does not want to lose access to the user&#039;s account needs to place on its web site something like:&lt;/p&gt;
+&lt;pre class=&quot;brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag&quot;&gt;&amp;lt;html&amp;gt;
+    &amp;lt;img src=&quot;https://OAUTH_PROVIDER/authorize?client_id=CLIENT_ID&amp;amp;client_secret=CLIENT_SECRET&amp;amp;redirect_uri=CALLBACK_URL&amp;amp;scope=SOME_SCOPE&amp;amp;response_type=code&quot;&amp;gt;
+&amp;lt;/html&amp;gt;&lt;/pre&gt;&lt;p&gt;Such code will &quot;silently&quot; produce new authorization code each time it has been loaded by the user. Check the traffic or contents of access.log on the callback server while opening a page with the html-snippet listed above:&lt;/p&gt;
+&lt;pre class=&quot;brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag&quot;&gt;root@server:/var/log/nginx# tail -f access.log
+&amp;lt;...&amp;gt;
+&amp;lt;IP hidden&amp;gt; - - [16/Apr/2015:13:08:56 +0000] &quot;GET /callback?state=0123456789abcdef&amp;amp;code=xlDxVYdnJlsAAAAAAAAFQDUmzla7P8Jg9fM2rNxwP8U HTTP/1.1&quot; 200 14 &quot;-&quot; &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36&quot;&lt;/pre&gt;&lt;p&gt;As you see, the malicious application has just obtained new &lt;span style=&quot;font-family: &#039;courier new&#039;, courier;&quot;&gt;code&lt;/span&gt; value that would not be revoked when user clicks &quot;Delete Authorization&quot;.&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Statistics&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;29&lt;/strong&gt; OAuth 2.0 providers tested&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;18&lt;/strong&gt; out of 29 of them had the issue&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;3 OAuth providers tested for the first issue are not included in statistics for the second one (32 - 29 = 3), as they had even bigger issues with access revocation: it was either not implemented at all or was not accessible by user.&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Summary&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;font-size: 15px; line-height: 1.625;&quot;&gt;read and understand RFCs and standards very attentively, many bugs are caused by bad implementation, not by bad requirements&lt;/span&gt;&lt;/li&gt;
+&lt;li style=&quot;font-size: 15px;&quot;&gt;&lt;span style=&quot;font-size: 15px; line-height: 1.625;&quot;&gt;be extremely careful when you develop multi-threaded applications&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span style=&quot;font-size: 15px; line-height: 1.625;&quot;&gt;being a user, do not grant access to unknown apps &lt;/span&gt;:)&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt; &lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-field-tags field-type-taxonomy-term-reference field-label-above&quot;&gt;&lt;div class=&quot;field-label&quot;&gt;Tags:&amp;nbsp;&lt;/div&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot; rel=&quot;dc:subject&quot;&gt;&lt;a href=&quot;/tags/oauth&quot; typeof=&quot;skos:Concept&quot; property=&quot;rdfs:label skos:prefLabel&quot; datatype=&quot;&quot;&gt;oauth&lt;/a&gt;&lt;/div&gt;&lt;div class=&quot;field-item odd&quot; rel=&quot;dc:subject&quot;&gt;&lt;a href=&quot;/tags/oauth20&quot; typeof=&quot;skos:Concept&quot; property=&quot;rdfs:label skos:prefLabel&quot; datatype=&quot;&quot;&gt;oauth2.0&lt;/a&gt;&lt;/div&gt;&lt;div class=&quot;field-item even&quot; rel=&quot;dc:subject&quot;&gt;&lt;a href=&quot;/tags/race-condition&quot; typeof=&quot;skos:Concept&quot; property=&quot;rdfs:label skos:prefLabel&quot; datatype=&quot;&quot;&gt;race condition&lt;/a&gt;&lt;/div&gt;&lt;div class=&quot;field-item odd&quot; rel=&quot;dc:subject&quot;&gt;&lt;a href=&quot;/tags/accesstoken&quot; typeof=&quot;skos:Concept&quot; property=&quot;rdfs:label skos:prefLabel&quot; datatype=&quot;&quot;&gt;access_token&lt;/a&gt;&lt;/div&gt;&lt;div class=&quot;field-item even&quot; rel=&quot;dc:subject&quot;&gt;&lt;a href=&quot;/tags/refreshtoken&quot; typeof=&quot;skos:Concept&quot; property=&quot;rdfs:label skos:prefLabel&quot; datatype=&quot;&quot;&gt;refresh_token&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</description>
+ <pubDate>Mon, 18 Sep 2017 13:58:53 +0000</pubDate>
+ <dc:creator>Dor1s</dc:creator>
+ <guid isPermaLink="false">4 at https://blog.avuln.com</guid>
+ <comments>https://blog.avuln.com/article/4#comments</comments>
+</item>
+</channel>
+</rss>

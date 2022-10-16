@@ -1,0 +1,114 @@
+.node h2.title,
+h1.page-title {
+  margin-bottom: 10px;
+  line-height: 1.3em;
+}
+.node-type-article .field-name-body,
+.node-article .field-name-body {
+  margin-top: 15px;
+}
+.node-type-article .field-name-body p,
+.node-article .field-name-body p {
+  margin-bottom: 5px;
+}
+.node-type-article .field-name-field-tags,
+.node-article .field-name-field-tags {
+  margin-top: 15px;
+}
+.node-type-article .field-name-field-tags .field-item,
+.node-article .field-name-field-tags .field-item {
+  display: inline-block;
+  margin-left: 7px;
+  margin-right: 0;
+}
+.node-type-article .field-name-field-tags .field-item a,
+.node-article .field-name-field-tags .field-item a {
+  line-height: 2em !important;
+  border-radius: 4px;
+}
+.social-profile ul li a {
+  width: 34px;
+  height: 34px;
+  background: none;
+  text-indent: 0;
+  font-size: 20px;
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 34px;
+}
+.social-profile ul li a.avuln__social_twitter {
+  background-color: #55acee;
+}
+#preface-area {
+  padding-top: 0;
+}
+.avuln__gradient {
+  background: #6a6665;
+  background: -moz-linear-gradient(right, #474747 0%, #6a6665 50%, #474747 100%);
+  background: -webkit-linear-gradient(right, #474747 0%, #6a6665 50%, #474747 100%);
+  background: -o-linear-gradient(right, #474747 0%, #6a6665 50%, #474747 100%);
+  background: -ms-linear-gradient(right, #474747 0%, #6a6665 50%, #474747 100%);
+  background: linear-gradient(right, #474747 0%, #6a6665 50%, #474747 100%);
+}
+.avuln__logo {
+  width: 270px;
+}
+.avuln__header {
+  border-radius: 0;
+}
+.avuln__header-logo {
+  margin: 0 3%;
+  padding: 37px 0;
+}
+.avuln__header-region {
+  background-color: #eee;
+  overflow: hidden;
+  padding: 0 3%;
+}
+.avuln__header-region #block-system-navigation {
+  margin-top: 30px;
+  margin-bottom: 0;
+}
+.avuln__footer {
+  padding: 30px 0 0;
+}
+.avuln__footer-menu {
+  margin: 0 3%;
+  text-align: justify;
+}
+.avuln__footer-menu-item {
+  display: inline-block;
+  padding: 0 5px;
+  color: #fff;
+  line-height: 32px;
+  vertical-align: top;
+}
+.avuln__footer-menu .avuln__footer-menu-twitter {
+  display: inline-block;
+  width: 83px;
+  height: 32px;
+  color: #fff;
+  line-height: 32px;
+  background-color: #55acee;
+  opacity: 0.9;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 18px;
+}
+.avuln__footer-menu .avuln__footer-menu-twitter:hover {
+  opacity: 1;
+}
+.avuln__footer-menu:after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+}
+#tinymce {
+  min-height: 0;
+  padding: 0;
+  background-color: #fff;
+}
+#tinymce p {
+  margin-bottom: 10px;
+}

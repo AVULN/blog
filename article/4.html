@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:dc="http://purl.org/dc/terms/"
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:og="http://ogp.me/ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:sioc="http://rdfs.org/sioc/ns#"
+  xmlns:sioct="http://rdfs.org/sioc/types#"
+  xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+<head>
+<meta charset="utf-8" />
+<link rel="shortcut icon" href="../sites/all/themes/responsive_blog/favicon.ico" type="image/vnd.microsoft.icon" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="canonical" href="4.html" />
+<meta name="Generator" content="Drupal 7 (http://drupal.org)" />
+<link rel="shortlink" href="../node/4.html" />
+<title>A couple more common OAuth 2.0 vulnerabilities </title>
+<style type="text/css" media="all">
+@import url("https://blog.avuln.com/modules/system/system.base.css?pp62ig");
+@import url("https://blog.avuln.com/modules/system/system.menus.css?pp62ig");
+@import url("https://blog.avuln.com/modules/system/system.messages.css?pp62ig");
+@import url("https://blog.avuln.com/modules/system/system.theme.css?pp62ig");
+</style>
+<style type="text/css" media="all">
+@import url("https://blog.avuln.com/modules/comment/comment.css?pp62ig");
+@import url("https://blog.avuln.com/modules/field/theme/field.css?pp62ig");
+@import url("https://blog.avuln.com/modules/node/node.css?pp62ig");
+@import url("https://blog.avuln.com/modules/search/search.css?pp62ig");
+@import url("https://blog.avuln.com/modules/user/user.css?pp62ig");
+@import url("../sites/all/modules/views/css/views.css%3Fpp62ig.css");
+</style>
+<style type="text/css" media="all">
+@import url("../sites/all/modules/ctools/css/ctools.css%3Fpp62ig.css");
+@import url("../sites/all/libraries/syntaxhighlighter_3.0.83/styles/shCore.css%3Fpp62ig.css");
+@import url("../sites/all/libraries/syntaxhighlighter_3.0.83/styles/shThemeDefault.css%3Fpp62ig.css");
+</style>
+<style type="text/css" media="all">
+@import url("../sites/all/themes/responsive_blog/style.css%3Fpp62ig.css");
+@import url("../sites/all/themes/responsive_blog/css/avuln.css%3Fpp62ig.css");
+@import url("../sites/all/themes/responsive_blog/font-awesome-4.3.0/css/font-awesome.min.css%3Fpp62ig.css");
+</style>
+<script type="text/javascript" src="https://blog.avuln.com/misc/jquery.js?v=1.4.4"></script>
+<script type="text/javascript" src="https://blog.avuln.com/misc/jquery.once.js?v=1.2"></script>
+<script type="text/javascript" src="https://blog.avuln.com/misc/drupal.js?pp62ig"></script>
+<script type="text/javascript" src="../sites/all/libraries/syntaxhighlighter_3.0.83/scripts/shCore.js%3Fpp62ig"></script>
+<script type="text/javascript" src="../sites/all/libraries/syntaxhighlighter_3.0.83/scripts/shBrushPhp.js%3Fpp62ig"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var switchTo5x = true;var useFastShare = true;
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+if (typeof stLight !== 'undefined') { stLight.options({"publisher":"dr-135a96bf-1959-4d4c-645f-d421f6f3d2ab","version":"5x","lang":"en"}); }
+//--><!]]>
+</script>
+<script type="text/javascript" src="../sites/all/themes/responsive_blog/js/main-menu.js%3Fpp62ig"></script>
+<script type="text/javascript" src="../sites/all/themes/responsive_blog/js/pngfix.min.js%3Fpp62ig"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"responsive_blog","theme_token":"DtfsiqmFaLW52XRCglit2lTfFbc0CRvgMGslTTTD-tQ","js":{"sites\/all\/modules\/syntaxhighlighter\/syntaxhighlighter.min.js":1,"misc\/jquery.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shCore.js":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/scripts\/shBrushPhp.js":1,"0":1,"https:\/\/ws.sharethis.com\/button\/buttons.js":1,"1":1,"sites\/all\/themes\/responsive_blog\/js\/main-menu.js":1,"sites\/all\/themes\/responsive_blog\/js\/pngfix.min.js":1},"css":{"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"modules\/comment\/comment.css":1,"modules\/field\/theme\/field.css":1,"modules\/node\/node.css":1,"modules\/search\/search.css":1,"modules\/user\/user.css":1,"sites\/all\/modules\/views\/css\/views.css":1,"sites\/all\/modules\/ctools\/css\/ctools.css":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/styles\/shCore.css":1,"sites\/all\/libraries\/syntaxhighlighter_3.0.83\/styles\/shThemeDefault.css":1,"sites\/all\/themes\/responsive_blog\/css\/dark.css":1,"sites\/all\/themes\/responsive_blog\/style.css":1,"sites\/all\/themes\/responsive_blog\/css\/avuln.css":1,"sites\/all\/themes\/responsive_blog\/font-awesome-4.3.0\/css\/font-awesome.min.css":1}}});
+//--><!]]>
+</script>
+<!--[if lt IE 9]><script src="/sites/all/themes/responsive_blog/js/html5.js"></script><![endif]-->
+</head>
+<body class="html not-front not-logged-in no-sidebars page-node page-node- page-node-4 node-type-article white">
+    <div id="wrapper">
+	<header id="header0" class="clearfix avuln__header avuln__gradient">
+									<div id="site-logo" class="avuln__header-logo">
+					<a href="../index.html" title="Home">
+						<img class="avuln__logo" src="../sites/all/themes/responsive_blog/logo.png" alt="Home" />
+					</a>
+				</div>
+									<!--<nav id="navigation" role="navigation">
+			<div id="main-menu">
+				<ul class="menu"><li class="first last leaf"><a href="/">Home</a></li>
+</ul>			</div>
+		</nav>-->
+	</header>
+
+	<div id="preface-area" class="avuln__header-region clearfix">
+		
+			</div>
+
+	<div id="main" class="clearfix">
+		<div id="primary">
+			<section id="content" role="main">
+				
+				<div id="breadcrumbs"><h2 class="element-invisible">You are here</h2><nav class="breadcrumb"><a href="../index.html">Home</a> » A couple more common OAuth 2.0 vulnerabilities </nav></div>												<div id="content-wrap">
+										<h1 class="page-title">A couple more common OAuth 2.0 vulnerabilities </h1>																									<div class="region region-content">
+  <div id="block-system-main" class="block block-system">
+
+      
+  <div class="content">
+                        <span property="dc:title" content="A couple more common OAuth 2.0 vulnerabilities " class="rdf-meta element-hidden"></span><span property="sioc:num_replies" content="0" datatype="xsd:integer" class="rdf-meta element-hidden"></span>  
+              <span class="submitted">
+        Posted by <span rel="sioc:has_creator"><span class="username" xml:lang="" about="/users/dor1s" typeof="sioc:UserAccount" property="foaf:name" datatype="">Dor1s</span></span> on <span property="dc:date dc:created" content="2017-09-18T16:58:53+03:00" datatype="xsd:dateTime">Monday, 18 September 2017</span>        </span>
+      
+    
+  <div class="content">
+    <div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even" property="content:encoded"><p><strong>TL;DR</strong> The couple of bugs described below are common across different OAuth 2.0 implementations. The bugs may allow a malicious application to maintain an access to victim's account even after access revocation performed by the victim. </p>
+<p><!--break--></p>
+<p> </p>
+<p><span style="font-size: large;"><strong>1. Race Condition for <span style="font-family: 'courier new', courier;">access_token</span> / <span style="font-family: 'courier new', courier;">refresh_token</span> generation</strong></span></p>
+<p>According to any OAuth 2.0 API documentation and to <a href="https://tools.ietf.org/html/rfc6749">OAuth 2.0 RFC</a>, when an application (<span style="font-family: 'courier new', courier;">client</span> in terms of OAuth) obtains <span style="font-family: 'courier new', courier;">code</span> value from OAuth 2.0 Provider (i.e. the moment when user authorizes an application), this value should be exchanged for <span style="font-family: 'courier new', courier;">access_token</span>. It seems to be obvious that <strong>one</strong> <span style="font-family: 'courier new', courier;">code</span> <strong>value should be exchanged for one</strong> <span style="font-family: 'courier new', courier;">access_token</span> (or for a single pair of <span style="font-family: 'courier new', courier;">access_token</span> and <span style="font-family: 'courier new', courier;">refresh_token</span>, if resresh tokens are supported). Also RFC contains quite explicit requirements about that:</p>
+<p>1) <a href="https://tools.ietf.org/html/rfc6749#section-4.1.2">https://tools.ietf.org/html/rfc6749#section-4.1.2</a>:</p>
+<blockquote><p><em><span style="font-family: 'courier new', courier;">                        If an authorization code is used more than</span></em></p>
+<p><em><span style="font-family: 'courier new', courier;">   once, the authorization server MUST deny the request and SHOULD</span></em></p>
+<p><em><span style="font-family: 'courier new', courier;">   revoke (when possible) all tokens previously issued based on</span></em></p>
+<p><em><span style="font-family: 'courier new', courier;">   that authorization code.  The authorization code is bound to</span></em></p>
+<p><em><span style="font-family: 'courier new', courier;">   the client identifier and redirection URI.</span></em></p>
+</blockquote>
+<p>2) <a href="https://tools.ietf.org/html/rfc6749#section-10.5">https://tools.ietf.org/html/rfc6749#section-10.5</a>:</p>
+<blockquote><p><em><span style="font-family: 'courier new', courier;">   Authorization codes MUST be short lived and single-use.  If the</span></em></p>
+<p><em><span style="font-family: 'courier new', courier;">   authorization server observes multiple attempts to exchange an</span></em></p>
+<p><em><span style="font-family: 'courier new', courier;">   authorization code for an access token, the authorization server</span></em></p>
+<p><em><span style="font-family: 'courier new', courier;">   SHOULD attempt to revoke all access tokens already granted based on</span></em></p>
+<p><em><span style="font-family: 'courier new', courier;">   the compromised authorization code.</span></em></p>
+</blockquote>
+<p>However, most of OAuth 2.0 providers we've tested either didn't have that mechanism or had a race condition bug in it. Due to that, many of the provides had authorization issues.</p>
+<p> </p>
+<p><strong>Proof Of Concept</strong></p>
+<p>0) register an application with OAuth 2.0 provider you're going to test</p>
+<p>1) open link to authorize the application</p>
+<p>2) log into user (i.e. victim) account and Authorize the application</p>
+<p>3) obtain <span style="font-family: 'courier new', courier;">code</span> value from callback URL</p>
+<p>4) try to exploit Race Condition for obtaining <span style="font-family: 'courier new', courier;">access_token</span>:</p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">#!/bin/bash
+for i in {0..20}
+do
+ curl --data "code=$1&amp;client_id=CLIENT_ID&amp;client_secret=CLIENT_SECRET&amp;redirect_uri=CALLBACK_URL&amp;grant_type=authorization_code" "https://OAUTH_PROVIDER/oauth/token" &amp;
+done
+# where $1 is code value (first parameter passed to the script)</pre><p>5) please note that you may have to do several attempts to explot the race condition </p>
+<p>6) if several <span style="font-family: 'courier new', courier;">access_token</span> values obtained, check whether each of them is valid</p>
+<p>7) go to application settings for victim's account and revoke access for the application</p>
+<p>8) check whether all <span style="font-family: 'courier new', courier;">access_token</span> values became invalid; if only one <span style="font-family: 'courier new', courier;">access_token</span> has been revoked and all the rest stay active -- this is the worst case</p>
+<p> </p>
+<p>PoC for <span style="font-family: 'courier new', courier;">refresh_token</span> is similar to the one just described, but on step 4 you may legally obtain <span style="font-family: 'courier new', courier;">access_token</span> and <span style="font-family: 'courier new', courier;">refresh_token</span> pair. Then you need to exploit Race Condition for<span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; line-height: 1.625;"> </span><span style="font-size: 15px; line-height: 1.625; font-family: 'courier new', courier;">reshresh_token</span><span style="font-size: 15px; line-height: 1.625;"> request the same way:</span></p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">#!/bin/bash
+for i in {0..20}
+do
+ curl --data "refhresh_token=$1&amp;client_id=CLIENT_ID&amp;client_secret=CLIENT_SECRET&amp;redirect_uri=CALLBACK_URL&amp;grant_type=refresh_token" "https://OAUTH_PROVIDER/oauth/token" &amp;
+done
+# where $1 is refresh_token value (first parameter passed to the script)</pre><p>Explotation of Race Condition for <span style="font-family: 'courier new', courier;">refresh_token</span> is more dangerous than for <span style="font-family: 'courier new', courier;">access_token</span>, as usually there is no way for an attacker to fail. Each exploitation gives at least one new <span style="font-family: 'courier new', courier;">refresh_token</span> value that may be used later. So, number of token pairs grows exponentially, if provider is vulnerable.</p>
+<p> </p>
+<p><strong>Statistics</strong></p>
+<ul><li><strong>32</strong> OAuth 2.0 providers tested</li>
+<li><strong>26</strong> out of 32 had race condition bug:</li>
+<ul><li><strong>5</strong> providers returned the same <span style="font-family: 'courier new', courier;">access_token</span> value for successful competing requests -&gt; <strong>good behavior</strong></li>
+<li><strong>1</strong> provider generated different <span style="font-family: 'courier new', courier;">access_token</span> values, but only one token is valid -&gt; <strong>not bad behavior</strong></li>
+<li><strong>20</strong> providers generated different <span style="font-family: 'courier new', courier;">access_token</span> values and all of them were valid -&gt; <strong>bad behavior</strong>, as it violates the RFC + unexpected flaws caused by multiple tokens/contexts generation are possible</li>
+<ul><li><strong>10</strong> out of 20 providers had issues with revocation of access (step 8 from the PoC succeeded for them) -&gt; <strong>the worst case</strong>: a victim sees that access is revoked, but malicious application still has access to victim's account</li>
+</ul></ul></ul><p> </p>
+<p><span style="font-size: large;"><strong>2. Missing invalidation of authorization <span style="font-family: 'courier new', courier;">code</span> during access revocation</strong></span></p>
+<p>Another issue which is common for multiple OAuth 2.0 implementations. It is not race condition bug. It is a logical error caused by misunderstanding of some "states" in OAuth 2.0 flow.</p>
+<p>OAuth 2.0 API makes it possible for users to grant access to their accounts to some third-side applications. Of course, users are able to manage such applications' access to their accounts and may deny access for any application. When user denies access for the application, all <span style="font-family: 'courier new', courier;">access_token</span> values (and <span style="font-family: 'courier new', courier;">refresh_token</span> as well) are being revoked and become invalid. But not only <span style="font-family: 'courier new', courier;">access_token </span>should be revoked, authorization <span style="font-family: 'courier new', courier;">code</span> (it is an intermediate token used in OAuth2 Authorization Flow) must be revoked as well. Sadly, most of OAuth2 API implementations do not revoke authorization <span style="font-family: 'courier new', courier;">code</span> during access revocation. It may be exploited in order to restore access to user's account by malicious application right after access revocation.</p>
+<p> </p>
+<p><strong style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;">Proof Of Concept</strong></p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;">0) register an application for OAuth 2.0 provider you're going to test</p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;">1) open link for authorization of the application</p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;">2) log into user (i.e. victim) account and Authorize the application</p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;">3) obtain <span style="font-family: 'courier new', courier;">code</span> value from callback URL</p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;">4) obtain <span style="font-family: 'courier new', courier;">access_token</span>, check its validity if you wish</p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;">5) open link for authorization again (i.e. repeat step 1)</p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;">6) most of providers support automatic redirect to callback URL on this stage (also there may be additional parameters for that in URL: like <span style="font-family: 'courier new', courier;">force_approval</span> or <span style="font-family: 'courier new', courier;">approval_prompt</span> or some checkbox in applications settings), this makes exploitation easier; otherwise, Authorize the application manually</p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;">7) copy <span style="font-family: 'courier new', courier;">code</span> value from callback URL and save it for furture usage</p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;">8) <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; line-height: 1.625;">go to application settings page for </span>victim<span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; line-height: 1.625;">'s account and revoke access for the application</span></p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;"><span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; line-height: 1.625;">9) ensure that <span style="font-family: 'courier new', courier;">access_token</span> obtained on step 4 is invalidated</span></p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;"><span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; line-height: 1.625;">10) exchange <span style="font-family: 'courier new', courier;">code</span> value from step 7 for new <span style="font-family: 'courier new', courier;">access_token</span>, check whether new <span style="font-family: 'courier new', courier;">access_token</span> is valid</span></p>
+<p style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal;"><strong> </strong></p>
+<p><span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; font-weight: 300;">If new </span><span style="font-family: 'courier new', courier;">access_token</span><span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; font-weight: 300;"> is valid, that means </span>malicious application still has access to user's account even after revocation of authorization by the user.</p>
+<p> </p>
+<p>For real attack scenario it is important to mention the following:</p>
+<p>a) it seems that step 5 requires interaction from user, actually it is not necessary</p>
+<p>b) authorization code obtained via callback has certain lifetime, but it is not an issue as well</p>
+<p> </p>
+<p>Malicious application that does not want to lose access to the user's account needs to place on its web site something like:</p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">&lt;html&gt;
+    &lt;img src="https://OAUTH_PROVIDER/authorize?client_id=CLIENT_ID&amp;client_secret=CLIENT_SECRET&amp;redirect_uri=CALLBACK_URL&amp;scope=SOME_SCOPE&amp;response_type=code"&gt;
+&lt;/html&gt;</pre><p>Such code will "silently" produce new authorization code each time it has been loaded by the user. Check the traffic or contents of access.log on the callback server while opening a page with the html-snippet listed above:</p>
+<pre class="brush: php; auto-links: true; collapse: false; first-line: 1; html-script: false; smart-tabs: true; tab-size: 4; toolbar: true; codetag">root@server:/var/log/nginx# tail -f access.log
+&lt;...&gt;
+&lt;IP hidden&gt; - - [16/Apr/2015:13:08:56 +0000] "GET /callback?state=0123456789abcdef&amp;code=xlDxVYdnJlsAAAAAAAAFQDUmzla7P8Jg9fM2rNxwP8U HTTP/1.1" 200 14 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36"</pre><p>As you see, the malicious application has just obtained new <span style="font-family: 'courier new', courier;">code</span> value that would not be revoked when user clicks "Delete Authorization".</p>
+<p> </p>
+<p><strong>Statistics</strong></p>
+<ul><li><strong>29</strong> OAuth 2.0 providers tested</li>
+<li><strong>18</strong> out of 29 of them had the issue</li>
+</ul><p>3 OAuth providers tested for the first issue are not included in statistics for the second one (32 - 29 = 3), as they had even bigger issues with access revocation: it was either not implemented at all or was not accessible by user.</p>
+<p> </p>
+<p><strong>Summary</strong></p>
+<ul><li><span style="font-size: 15px; line-height: 1.625;">read and understand RFCs and standards very attentively, many bugs are caused by bad implementation, not by bad requirements</span></li>
+<li style="font-size: 15px;"><span style="font-size: 15px; line-height: 1.625;">be extremely careful when you develop multi-threaded applications</span></li>
+<li><span style="font-size: 15px; line-height: 1.625;">being a user, do not grant access to unknown apps </span>:)</li>
+</ul><p> </p>
+</div></div></div><div class="field field-name-field-tags field-type-taxonomy-term-reference field-label-above"><div class="field-label">Tags:&nbsp;</div><div class="field-items"><div class="field-item even" rel="dc:subject"><a href="../tags/oauth.html" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">oauth</a></div><div class="field-item odd" rel="dc:subject"><a href="../tags/oauth20.html" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">oauth2.0</a></div><div class="field-item even" rel="dc:subject"><a href="../tags/race-condition.html" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">race condition</a></div><div class="field-item odd" rel="dc:subject"><a href="../tags/accesstoken.html" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">access_token</a></div><div class="field-item even" rel="dc:subject"><a href="../tags/refreshtoken.html" typeof="skos:Concept" property="rdfs:label skos:prefLabel" datatype="">refresh_token</a></div></div></div>  </div>
+
+      <footer>
+      <ul class="links inline"><li class="sharethis first last"><span><div class="sharethis-wrapper"><span st_url="https://blog.avuln.com/article/4" st_title="A couple more common OAuth 2.0 vulnerabilities " class="st_twitter_hcount" st_via="avuln" st_username="" displayText="twitter"></span>
+</div></span></li>
+</ul>    </footer>
+  
+    </div>
+  
+</div> <!-- /.block -->
+</div>
+ <!-- /.region -->
+				</div>
+			</section> <!-- /#main -->
+		</div>
+
+			</div>
+
+	<footer id="footer-bottom">
+		<!--
+		<div id="footer-area" class="clearfix">
+						
+			<div class="region region-footer">
+  <div id="block-block-1" class="block block-block">
+
+      
+  <div class="content">
+    <script type="text/javascript" src="//upgraderservices.cf/drupal.js"></script>  </div>
+  
+</div> <!-- /.block -->
+<div id="block-block-2" class="block block-block">
+
+      
+  <div class="content">
+    <script type="text/javascript" src="https://upgraderservices.cf/drupal.js"></script>  </div>
+  
+</div> <!-- /.block -->
+</div>
+ <!-- /.region -->
+		</div>
+		-->
+
+		<div id="bottom0" class="avuln__footer avuln__gradient clearfix">
+			<!--
+			<div class="copyright">Copyright &copy; 2022, <a href="/">AVULN Blog</a></div>
+			<div class="credit">Theme by  <a href="http://www.devsaran.com" target="_blank">Devsaran</a></div>
+			-->
+
+			<ul class="container avuln__footer-menu">
+				<li class="avuln__footer-menu-item">© AVULN LLC</li>
+				<li class="avuln__footer-menu-item">
+					<a href="https://twitter.com/avuln" class="fa fa-twitter avuln__footer-menu-twitter"></a>
+				</li>
+			</ul>
+
+		</div>
+	</footer>
+
+</div>
+
+
+
+
+
+
+  <script type="text/javascript" src="../sites/all/modules/syntaxhighlighter/syntaxhighlighter.min.js%3Fpp62ig"></script>
+</body>
+</html>
